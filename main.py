@@ -28,6 +28,20 @@ sheet = client.open_by_key(
 
 st.title("GNS 101 CBT")
 
+st.markdown(
+    """
+    <div style="text-align: center; margin-bottom: 25px;">
+        <p style="font-size: 18px; color: #555;">
+            Computer-Based Test Platform
+        </p>
+        <p style="font-size: 16px;">
+            <strong>Developed by Eniola Adebowale</strong>
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 Name = st.text_input("Enter your name")
 
 
@@ -268,3 +282,15 @@ if Name:
             st.error("FAILED ❌")
 
         st.success("Your result has been recorded successfully! ✅")
+
+        st.markdown("---")
+
+st.markdown(
+    """
+    <div style="text-align: center; color: #777; padding: 10px;">
+        <p>GNS 101 CBT</p>
+        <p>Developed by <strong>Eniola Adebowale</strong> © 2026</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
