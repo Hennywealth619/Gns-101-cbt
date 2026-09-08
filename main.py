@@ -1,18 +1,41 @@
 import streamlit as st
+import gspread
+from google.oauth2.service_account import Credentials
+
+
+# =========================
+# GOOGLE SHEETS CONNECTION
+# =========================
+
+credentials = Credentials.from_service_account_info(
+    st.secrets["google"],
+    scopes=[
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+)
+
+client = gspread.authorize(credentials)
+
+sheet = client.open_by_key(
+    "11D0ExcTCbSqYyk_WxrAHJHyFftrdZ_DrgWBIY04WMUM"
+).sheet1
+
+
+# =========================
+# CBT TITLE
+# =========================
 
 st.title("GNS 101 CBT")
 
 Name = st.text_input("Enter your name")
 
-if Name:
 
-    st.write(f"Welcome {Name}!")
-    st.write("You are about to begin your GNS 101 test.")
-    st.write("Kindly Answer all Questions using the options")
-    st.write("GOOD LUCK!")
+# =========================
+# QUESTIONS
+# =========================
 
-
-    Questions = [
+Questions = [
     {
         "question": "Who is the President of Nigeria?",
         "options": [
@@ -180,47 +203,78 @@ if Name:
 ]
 
 
+# =========================
+# START TEST
+# =========================
 
-    Answers = [
-        'b', 'c', 'b', 'c', 'b',
-        'a', 'a', 'b', 'b', 'c',
-        'b', 'a', 'b', 'b', 'a'
-    ]
+if Name:
 
+    st.write(f"Welcome {Name}!")
+    st.write("You are about to begin your GNS 101 test.")
+    st.write("Kindly Answer all Questions using the options")
+    st.write("GOOD LUCK!")
 
     student_answers = []
 
-for number, item in enumerate(Questions, 1):
+    for number, item in enumerate(Questions, 1):
 
-    st.write(f"### {number}. {item['question']}")
+        st.write(f"### {number}. {item['question']}")
 
-    answer = st.radio(
-        "Choose your answer:",
-        item["options"],
-        key=f"question_{number}"
-    )
+        answer = st.radio(
+            "Choose your answer:",
+            item["options"],
+            key=f"question_{number}"
+        )
 
-    student_answers.append(answer[0])
+        student_answers.append(answer[0])
 
 
-if st.button("Submit Test"):
+    # =========================
+    # SUBMIT TEST
+    # =========================
 
-    score = 0
+    if st.button("Submit Test"):
 
-    for user_answer, item in zip(student_answers, Questions):
+        score = 0
 
-        if user_answer == item["answer"]:
-            score += 1
+        for user_answer, item in zip(student_answers, Questions):
 
-    percentage = (score / len(Questions)) * 100
+            if user_answer == item["answer"]:
+                score += 1
 
-    st.write("## FINAL RESULT")
+        percentage = (score / len(Questions)) * 100
 
-    st.write(f"Student: {Name}")
-    st.write(f"Total: {score}/{len(Questions)}")
-    st.write(f"Percentage: {percentage:.0f}%")
+        if percentage >= 50:
+            result = "PASSED"
+        else:
+            result = "FAILED"
 
-    if percentage >= 50:
-        st.success("PASSED 🎉")
-    else:
-        st.error("FAILED ❌")
+
+        # =========================
+        # SAVE RESULT TO GOOGLE SHEETS
+        # =========================
+
+        sheet.append_row([
+            Name,
+            f"{score}/{len(Questions)}",
+            f"{percentage:.0f}%",
+            result
+        ])
+
+
+        # =========================
+        # DISPLAY RESULT
+        # =========================
+
+        st.write("## FINAL RESULT")
+
+        st.write(f"Student: {Name}")
+        st.write(f"Total: {score}/{len(Questions)}")
+        st.write(f"Percentage: {percentage:.0f}%")
+
+        if result == "PASSED":
+            st.success("PASSED 🎉")
+        else:
+            st.error("FAILED ❌")
+
+        st.success("Your result has been recorded successfully! ✅")
