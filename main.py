@@ -46,7 +46,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "What is the capital of Nigeria?",
         "options": [
@@ -57,7 +56,6 @@ Questions = [
         ],
         "answer": "c"
     },
-
     {
         "question": "How many states are there in Nigeria?",
         "options": [
@@ -68,7 +66,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "Which planet is known as the Red Planet?",
         "options": [
@@ -79,7 +76,6 @@ Questions = [
         ],
         "answer": "c"
     },
-
     {
         "question": "What is 10 + 15?",
         "options": [
@@ -90,7 +86,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "Which of these is a programming language?",
         "options": [
@@ -101,7 +96,6 @@ Questions = [
         ],
         "answer": "a"
     },
-
     {
         "question": "What does CPU stand for?",
         "options": [
@@ -112,7 +106,6 @@ Questions = [
         ],
         "answer": "a"
     },
-
     {
         "question": "Which device is used for typing on a computer?",
         "options": [
@@ -123,7 +116,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "How many days are there in a normal year?",
         "options": [
@@ -134,7 +126,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "Which continent is Nigeria located in?",
         "options": [
@@ -145,7 +136,6 @@ Questions = [
         ],
         "answer": "c"
     },
-
     {
         "question": "What is 100 divided by 4?",
         "options": [
@@ -156,7 +146,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "Which of these is an operating system?",
         "options": [
@@ -167,7 +156,6 @@ Questions = [
         ],
         "answer": "a"
     },
-
     {
         "question": "What is the opposite of hot?",
         "options": [
@@ -178,7 +166,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "Which animal is known as the king of the jungle?",
         "options": [
@@ -189,7 +176,6 @@ Questions = [
         ],
         "answer": "b"
     },
-
     {
         "question": "What does RAM stand for?",
         "options": [
@@ -223,10 +209,14 @@ if Name:
         answer = st.radio(
             "Choose your answer:",
             item["options"],
+            index=None,
             key=f"question_{number}"
         )
 
-        student_answers.append(answer[0])
+        if answer:
+            student_answers.append(answer[0])
+        else:
+            student_answers.append("")
 
 
     # =========================
